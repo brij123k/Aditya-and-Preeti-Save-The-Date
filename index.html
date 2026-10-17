@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Preeti &amp; Aditya</title>
+  <meta name="description" content="Save the date — Preeti Varade &amp; Aditya Jain,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400&family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
+  <!-- first screen loads before everything else -->
+  <link rel="preload" as="image" href="assets/intro-poster.webp" fetchpriority="high">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+
+    <!-- ===== Screen 1: closed window intro ===== -->
+    <section class="intro" id="intro" role="button" tabindex="0" aria-label="Tap to open the invitation">
+      <video class="intro-video" id="introVideo" src="assets/intro.mp4" poster="assets/intro-poster.webp"
+             muted playsinline webkit-playsinline preload="auto"></video>
+      <p class="tap-hint">Tap to open</p>
+    </section>
+
+    <!-- ===== Screen 2: the card ===== -->
+    <section class="card" id="card" aria-hidden="true">
+      <img class="card-bg" src="assets/main-website-final.webp" alt="Preeti Varade and Aditya Jain — this is where our forever begins. Save the date, 8th–9th February 2027, Mayfair, Puri">
+      <canvas class="date-mask" id="dateMask" aria-hidden="true"></canvas>
+
+      <!-- sea over the top landscape -->
+      <div class="water"><img src="assets/water_new.webp" alt=""></div>
+
+      <!-- foliage + garlands -->
+      <img class="piece leaf-left sway-base garland-left"  src="assets/leaf-left.webp"  alt="">
+      <img class="piece palm-right sway-base garland-right" src="assets/palm-right.webp" alt="">
+      <img class="piece garland garland-top"  src="assets/garland-a.webp"  alt="">
+      <img class="piece garland garland-tree1" src="assets/garland-b.webp" alt="">
+      <img class="piece garland garland-tree2" src="assets/garland-a.webp" alt="">
+      <img class="piece garland bottom-flower bottom-flower-1" src="assets/bottom-flower.webp" alt="">
+      <img class="piece garland bottom-flower bottom-flower-2" src="assets/bottom-flower.webp" alt="">
+      <img class="piece garland bottom-flower bottom-flower-3" src="assets/bottom-flower.webp" alt="">
+      <img class="piece garland bottom-flower bottom-flower-4" src="assets/bottom-flower.webp" alt="">
+
+      <!-- save the date: the date sits under the flowers, guests scratch them off -->
+      <img class="date" id="date" src="assets/date.png" alt="8th – 9th February 2027">
+      <div class="flowers reveal" id="flowers" aria-label="Scratch the flowers to reveal the date">
+        <span></span><span></span><span></span>
+      </div>
+      <p class="scratch-hint" id="scratchHint">Scratch the flowers to reveal the date</p>
+
+      <!-- countdown -->
+      <div class="countdown reveal" id="countdown" aria-live="polite">
+        <span data-unit="d">00</span><i>:</i><span data-unit="h">00</span><i>:</i><span data-unit="m">00</span><i>:</i><span data-unit="s">00</span>
+      </div>
+    </section>
+
+    <!-- background music: starts automatically when the link is opened -->
+    <audio id="music" src="https://cdn.shopify.com/s/files/1/0778/9474/6301/files/Chaand_Baaliyan_On_Piano.mp3?v=1791735345" loop preload="auto" autoplay playsinline></audio>
+    <button class="music-btn" id="musicBtn" type="button" aria-label="Play music">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+    </button>
+
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

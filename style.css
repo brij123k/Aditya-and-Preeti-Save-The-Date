@@ -1,0 +1,390 @@
+/* All artwork is laid out in the original design's pixel grid:
+   card = 1080 x 3840, intro stage = 1080 x 1920.
+   --u is one design pixel, so positions read straight off the artwork. */
+
+:root {
+  --col: min(100vw, 480px);
+  --ink: #6b4d55;
+  --gold: #c9772e;
+  --page: #f6eee8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  background:
+    radial-gradient(120% 60% at 50% 0%, #d9eff4 0%, transparent 60%),
+    radial-gradient(120% 60% at 50% 100%, #f8dbe6 0%, transparent 60%),
+    var(--page);
+  font-family: "Cormorant Garamond", Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.locked { overflow: hidden; }
+
+.app {
+  position: relative;
+  width: var(--col);
+  margin: 0 auto;
+  min-height: 100dvh;
+  box-shadow: 0 0 60px rgba(80, 60, 70, .18);
+}
+
+/* ================= Intro (closed window) ================= */
+
+.intro {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 50%;
+  width: var(--col);
+  height: 100dvh;
+  transform: translateX(-50%);
+  overflow: hidden;
+  cursor: pointer;
+  background: #f4ede4;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.intro-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.tap-hint {
+  position: absolute;
+  left: 50%;
+  bottom: max(6dvh, 28px);
+  transform: translateX(-50%);
+  padding: 10px 26px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #2f7c8a;
+  font-size: 15px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 6px 24px rgba(40, 110, 130, .18);
+  animation: pulse 2.2s ease-in-out infinite;
+  transition: opacity .5s ease;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translateX(-50%) scale(1);    opacity: 1; }
+  50%      { transform: translateX(-50%) scale(1.05); opacity: .8; }
+}
+
+/* opening: the video plays, then the intro fades into the card */
+.intro.open { cursor: default; pointer-events: none; }
+.intro.open .tap-hint { opacity: 0; animation: none; }
+.intro.done {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+/* ================= Card ================= */
+
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1080 / 3840;
+  overflow: hidden;
+  container-type: inline-size;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.card.show { opacity: 1; }
+
+.card > * {
+  --u: calc(100cqw / 1080);
+  --v: calc(100cqw / 1080);
+}
+
+.card > :not(.card-bg) {
+  /* Adjust this design-pixel offset to move all layered artwork together. */
+  translate: 0 calc(32 * var(--v));
+}
+
+.card-bg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.piece,
+.water,
+.date-mask,
+.flowers,
+.date,
+.countdown {
+  position: absolute;
+}
+
+.date-mask {
+  left: calc(285 * var(--u));
+  top: calc(2128 * var(--v));
+  width: calc(510 * var(--u));
+  height: calc(134 * var(--v));
+  pointer-events: none;
+}
+
+/* sea in front of the mountains */
+.water {
+  left: 0;
+    top: calc(1131 * var(--v));
+  width: 100%;
+    height: calc(297 * var(--v));
+  overflow: hidden;
+    -webkit-mask-image: linear-gradient(transparent, #000 calc(10 * var(--v)));
+      mask-image: linear-gradient(transparent, #000 calc(10 * var(--v)));
+}
+.water img {
+  position: absolute;
+  top: 0;
+  left: -6%;
+  width: 112%;
+  height: 100%;
+  animation: tide 4.5s ease-in-out infinite alternate;
+}
+.water::after {          /* moving glints */
+  content: "";
+  position: absolute;
+  inset: 0 0 25% 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, .35) 45%, transparent 60%);
+  background-size: 250% 100%;
+  mix-blend-mode: soft-light;
+  animation: glint 3.5s linear infinite;
+}
+
+@keyframes tide {
+  from { transform: translateX(-3.5%) scaleY(1); }
+  to   { transform: translateX(3.5%)  scaleY(1.05); }
+}
+@keyframes glint {
+  from { background-position: 150% 0; }
+  to   { background-position: -100% 0; }
+}
+
+.leaf-left {
+  left: calc(-4 * var(--u));
+  top: calc(1110 * var(--v));
+  width: calc(295 * var(--u));
+  transform-origin: 0 100%;
+  animation: sway-l 3.2s ease-in-out infinite;
+}
+
+.palm-right {
+  left: calc(777 * var(--u));
+  top: calc(760 * var(--v));
+  width: calc(341 * var(--u));
+  transform-origin: 88% 100%;
+  animation: sway-r 3.6s ease-in-out infinite;
+}
+
+@keyframes sway-l {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(3.5deg); }
+}
+@keyframes sway-r {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(-3deg); }
+}
+
+.garland {
+  transform-origin: 50% 0;
+  animation: swing 2.4s ease-in-out infinite;
+}
+/* the artwork already has this tassel string, so show only the marigold strand */
+.garland-top        { left: calc(24 * var(--u));  top: 0;                         width: calc(145 * var(--u)); clip-path: inset(0 0 0 52%); }
+.garland-tree1      { left: calc(48 * var(--u));  top: calc(2362 * var(--v));      width: calc(101 * var(--u)); animation-delay: -.8s; }
+.garland-tree2      { left: calc(20 * var(--u));  top: calc(2569 * var(--v));      width: calc(110 * var(--u)); animation-delay: -1.6s; }
+.bottom-flower { left: calc(750 * var(--u)); top: calc(2967 * var(--v)); width: calc(291 * var(--u)); }
+.bottom-flower-1 { clip-path: inset(33.3% 88% 30% 0); transform-origin: 5.8% 34%; }
+.bottom-flower-2 { clip-path: inset(37.5% 66% 0 17%); transform-origin: 25.4% 38.2%; animation-delay: -1.2s; }
+.bottom-flower-3 { clip-path: inset(30.5% 45% 33.3% 42%); transform-origin: 48.1% 31.2%; }
+.bottom-flower-4 { clip-path: inset(0 0 4.4% 68%); transform-origin: 73.9% .2%; animation-delay: -1.2s; }
+
+@keyframes swing {
+  0%, 100% { transform: rotate(2.6deg); }
+  50%      { transform: rotate(-2.6deg); }
+}
+
+/* three frangipani, cut from one sprite — scratched off to reveal the date */
+.flowers {
+  z-index: 2;
+  left: calc(285 * var(--u));
+  top: calc(2128 * var(--v));
+  width: calc(510 * var(--u));
+  height: calc(134 * var(--v));
+  display: flex;
+}
+.flowers span {
+  flex: 1;
+  background: url("assets/flowers.webp") no-repeat;
+  background-size: 300% 100%;
+  transform: scale(0) rotate(-120deg);
+  transition: transform .8s cubic-bezier(.3, 1.5, .5, 1), opacity .6s ease;
+}
+.flowers span:nth-child(1) { background-position: 0 0; }
+.flowers span:nth-child(2) { background-position: 50% 0;  transition-delay: .12s; }
+.flowers span:nth-child(3) { background-position: 100% 0; transition-delay: .24s; }
+
+.flowers.in span { transform: scale(1) rotate(0deg); }
+
+/* scratch layer: the canvas takes over from the sprite */
+.flowers canvas { display: block; width: 100%; height: 100%; }
+.flowers span:has(canvas) { background: none; }
+.flowers.scratchable { touch-action: none; cursor: pointer; }
+.flowers.scratchable span:not(.gone) { animation: breathe 1.4s ease-in-out infinite; }
+.flowers.scratchable span:nth-child(2) { animation-delay: .2s; }
+.flowers.scratchable span:nth-child(3) { animation-delay: .4s; }
+.flowers span.gone { opacity: 0; transform: scale(1.4) rotate(40deg); pointer-events: none; }
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* the date hides under the flowers */
+.date {
+  left: calc(310 * var(--u));
+  top: calc(2194 * var(--v));
+  width: calc(459 * var(--u));
+  opacity: 0;
+}
+.date.show { opacity: 1; }
+.date.revealed { animation: date-pop .9s ease; }
+
+@keyframes date-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); filter: drop-shadow(0 0 calc(12 * var(--u)) rgba(240, 122, 90, .7)); }
+  100% { transform: scale(1); }
+}
+
+.scratch-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(2298 * var(--v));
+  text-align: center;
+  font-size: calc(34 * var(--u));
+  letter-spacing: .12em;
+  color: var(--gold);
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity .5s ease;
+}
+.scratch-hint.hidden { opacity: 0; }
+
+@keyframes hint {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .45; }
+}
+
+.petal {
+  position: absolute;
+  z-index: 3;
+  width: calc(16 * var(--u));
+  height: calc(26 * var(--v));
+  border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+  pointer-events: none;
+}
+
+.countdown {
+  left: 0;
+  right: 0;
+  top: calc(2665 * var(--v));
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: calc(14 * var(--u));
+  font-family: "Bodoni Moda", "Didot", serif;
+  font-size: calc(90 * var(--u));
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.countdown i {
+  font-style: normal;
+  font-size: .8em;
+  transform: translateY(-.06em);
+}
+.countdown span {
+  display: inline-block;
+  min-width: 1.25em;
+  text-align: center;
+}
+.countdown span.tick { animation: tick .5s ease; }
+
+@keyframes tick {
+  0%   { transform: translateY(-.12em); opacity: .3; }
+  100% { transform: none;               opacity: 1; }
+}
+
+/* scroll reveal */
+.reveal:not(.flowers) {
+  opacity: 0;
+  transform: translateY(calc(40 * var(--v)));
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.in:not(.flowers) { opacity: 1; transform: none; }
+
+/* music on/off */
+.music-btn {
+  position: fixed;
+  z-index: 20;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  right: max(16px, calc((100vw - var(--col)) / 2 + 16px));
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, .8);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 6px 20px rgba(150, 80, 60, .22);
+  color: var(--gold);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.music-btn[hidden] { display: none; }
+.music-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.music-btn.playing svg { animation: spin 6s linear infinite; }
+.music-btn:not(.playing)::after {   /* slash when muted */
+  content: "";
+  position: absolute;
+  width: 26px;
+  height: 2px;
+  background: currentColor;
+  transform: rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: .01s !important;
+    transition-delay: 0s !important;
+  }
+}
